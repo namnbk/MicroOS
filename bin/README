@@ -1,0 +1,9 @@
+INSTRUCTIONS for compiling hello.c
+
+$ cd bin
+
+$ gcc -nostdinc -march=i386 -g -n -nostdlib -nostartfiles -nodefaultlibs -Wall -I../common -I../shell ../common/*.c -e_start -Ttext=0x0 hello.c ../shell/SysCall.c -o hello
+
+$ objcopy -S -j.text -j.rodata -j.data -O binary hello HELLO.BIN
+
+$ mcopy -i ../muos.img HELLO.BIN ::

@@ -1,0 +1,55 @@
+INSTRUCTIONS for compiling
+
+Step1: This directory contains the files constituting the shell.
+------ The shell must be compiled using the following commands:
+
+$ cd shell
+$ gcc -nostdinc -march=i386 -g -n -nostdlib -nostartfiles -nodefaultlibs -Wall -I../common *.c ../common/*.c -e_start -Ttext=0x0 -o shell
+
+Step2 : The above command generates a debuggable version of the
+------  shell.  However, a raw computer without any OS cannot run it.
+        You need to extract just the executable part along with
+        necessary data using the objcopy command as shown below:
+
+$ objcopy -S -j.text -j.rodata -j.data -O binary shell SHELL.BIN
+
+The above command extracts the shell into a pure binary file called
+SHELL.BIN
+
+Step 3: The next step involves copying SHELL.BIN to muos.img to create
+------- a useable floppy image.  Ensure that the kernel has already
+        been copied to muos.img first! Perform this task using the mcopy
+        command as shown below (assumes you are in the shell directory):
+
+$ mcopy -i ../muos.img SHELL.BIN ::
+
+Ensure that the file has been copied using the mdir command as shown
+below (along with output)
+
+$ mdir -i ../muos.img ::
+ Volume in drive : has no label
+ Volume Serial Number is 265D-AFC5
+Directory for ::/
+
+KERNEL   BIN     13312 2007-02-13  23:36
+SHELL    BIN      2156 2007-02-13  23:39
+        1 file               13 312 bytes
+                          1 443 352 bytes free
+
+Step 5: Copy any other files and utility programs (such as shell and
+------- all executables in the bin directory) to the floppy image
+        (muos.img) using the mcopy command (shown above).  A typical
+	muos image typically has the following files:
+
+$ mdir -i ../muos.img ::
+ Volume in drive : has no label
+ Volume Serial Number is 265D-AFC5
+Directory for ::/
+
+KERNEL   BIN     13312 2007-02-13  23:36
+SHELL    BIN      2156 2007-02-13  23:39
+HELLO    BIN       556 2007-02-13  23:39
+CLEAR    BIN       382 2007-02-13  23:39
+        4 files              16 406 bytes
+                          1 440 256 bytes free
+
